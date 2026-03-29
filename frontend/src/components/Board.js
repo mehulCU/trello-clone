@@ -24,12 +24,7 @@ function Board() {
     if (res.data.length > 0) {
       setBoardId(res.data[0].id); // default board
     }
-  };
-
-    if (boardId) {
-    fetchLists();
-  }
-}, [boardId]);
+  };;
   
   useEffect(() => {
     fetchBoards();
