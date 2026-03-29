@@ -6,8 +6,8 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 # 🔥 DATABASE
-from app.database import engine
-from app.models import Base
+from app.database import engine, Base
+
 
 # 🔥 IMPORT ALL MODELS (VERY IMPORTANT)
 from app.models.board import Board
