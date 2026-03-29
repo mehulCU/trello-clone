@@ -1,0 +1,19 @@
+# Mac
+.DS_Store
+
+# Python
+__pycache__/
+**/__pycache__/
+*.pyc
+
+# Database
+*.db
+
+# Uploads
+backend/uploads/
+
+# Node
+node_modules/
+
+# Env
+.env
