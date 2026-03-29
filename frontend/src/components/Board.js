@@ -18,7 +18,7 @@ function Board() {
   const [filterDue, setFilterDue] = useState("");
 
   const fetchBoards = async () => {
-    const res = await axios.get("${API}/boards");
+    const res = await axios.get(`${API}/boards");
     setBoards(res.data);
   
     if (res.data.length > 0) {
@@ -65,7 +65,7 @@ function Board() {
   const addList = async () => {
     const title = prompt("List name:");
     if (!title) return;
-    await axios.post("${API}/lists", null, {
+    await axios.post(`${API}/lists", null, {
       params: { title, board_id: boardId },
     });
     fetchLists();
@@ -172,7 +172,7 @@ function Board() {
 
       const order = newLists.map((l) => Number(l.id));
 
-      await axios.put("${API}/lists/reorder", {
+      await axios.put(`${API}/lists/reorder", {
         order,
       });
 
@@ -200,7 +200,7 @@ function Board() {
 
       const order = sourceCards.map((c) => Number(c.id));
 
-      await axios.put("${API}/cards/reorder", {
+      await axios.put(`${API}/cards/reorder", {
         order,
       });
     } else {
@@ -273,7 +273,7 @@ function Board() {
     const title = prompt("Board name:");
     if (!title) return;
 
-    await axios.post("${API}/boards", null, {
+    await axios.post(`${API}/boards", null, {
       params: { title },
     });
 
