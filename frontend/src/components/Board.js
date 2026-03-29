@@ -26,7 +26,10 @@ function Board() {
     }
   };
 
-  useEffect(() => {
+    if (boardId) {
+    fetchLists();
+  }
+}, [boardId]);useEffect(() => {
     fetchBoards();
   }, []);
   
@@ -34,7 +37,7 @@ function Board() {
     if (boardId) {
       fetchLists();
     }
-  }, [boardId]);
+  }, [boardId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchLists = async () => {
     const res = await axios.get(
@@ -239,7 +242,7 @@ function Board() {
   className="container"
   style={{
     background:
-      boards.find((b) => b.id == boardId)?.background || "#0079bf",
+      boards.find((b) => b.id === boardId)?.background || "#0079bf",
     minHeight: "100vh",
   }}
 >
