@@ -29,7 +29,9 @@ function Board() {
     if (boardId) {
     fetchLists();
   }
-}, [boardId]);useEffect(() => {
+}, [boardId]);
+  
+  useEffect(() => {
     fetchBoards();
   }, []);
   
