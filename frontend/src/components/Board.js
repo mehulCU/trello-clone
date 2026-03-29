@@ -6,7 +6,7 @@ import {
   Droppable,
   Draggable,
 } from "@hello-pangea/dnd";
-
+const API = "https://trello-clone-7ek1.onrender.com";
 function Board() {
   const [lists, setLists] = useState([]);
   const [boards, setBoards] = useState([]);
@@ -18,7 +18,7 @@ function Board() {
   const [filterDue, setFilterDue] = useState("");
 
   const fetchBoards = async () => {
-    const res = await axios.get("http://127.0.0.1:8000/boards");
+    const res = await axios.get("${API}/boards");
     setBoards(res.data);
   
     if (res.data.length > 0) {
@@ -38,7 +38,7 @@ function Board() {
 
   const fetchLists = async () => {
     const res = await axios.get(
-      `http://127.0.0.1:8000/lists/${boardId}`
+      `${API}/lists/${boardId}`
     );
     setLists(res.data);
     res.data.forEach((list) => fetchCards(list.id));
@@ -47,7 +47,7 @@ function Board() {
   // ✅ UPDATED (IMPORTANT)
   const fetchCards = async (listId) => {
     const res = await axios.get(
-      `http://127.0.0.1:8000/cards/${listId}`
+      `${API}/cards/${listId}`
     );
 
     const updated = res.data.map((card) => ({
@@ -65,7 +65,7 @@ function Board() {
   const addList = async () => {
     const title = prompt("List name:");
     if (!title) return;
-    await axios.post("http://127.0.0.1:8000/lists", null, {
+    await axios.post("${API}/lists", null, {
       params: { title, board_id: boardId },
     });
     fetchLists();
@@ -75,13 +75,13 @@ function Board() {
     const title = prompt("New title:");
     if (!title) return;
     await axios.put(
-      `http://127.0.0.1:8000/lists/${id}?title=${title}`
+      `${API}/lists/${id}?title=${title}`
     );
     fetchLists();
   };
 
   const deleteList = async (id) => {
-    await axios.delete(`http://127.0.0.1:8000/lists/${id}`);
+    await axios.delete(`${API}/lists/${id}`);
     fetchLists();
   };
 
@@ -92,7 +92,7 @@ function Board() {
     if (!title) return;
 
     await axios.post(
-      `http://127.0.0.1:8000/cards?title=${title}&list_id=${listId}`
+      `${API}/cards?title=${title}&list_id=${listId}`
     );
 
     fetchLists();
@@ -104,7 +104,7 @@ function Board() {
     if (!title) return;
 
     await axios.put(
-      `http://127.0.0.1:8000/cards/${cardId}?title=${title}&description=${description}`
+      `${API}/cards/${cardId}?title=${title}&description=${description}`
     );
 
     fetchLists();
@@ -112,7 +112,7 @@ function Board() {
 
   const deleteCard = async (cardId) => {
     await axios.put(
-      `http://127.0.0.1:8000/cards/${cardId}/archive`
+      `${API}/cards/${cardId}/archive`
     );
     fetchLists();
   };
@@ -123,7 +123,7 @@ function Board() {
     }
   
     const res = await axios.get(
-      `http://127.0.0.1:8000/cards/search/${boardId}?query=${search}`
+      `${API}/cards/search/${boardId}?query=${search}`
     );
   
     const grouped = {};
@@ -141,7 +141,7 @@ function Board() {
   };
   const handleFilter = async () => {
     const res = await axios.get(
-      `http://127.0.0.1:8000/cards/filter/${boardId}?label=${filterLabel}&member=${filterMember}&due=${filterDue}`
+      `${API}/cards/filter/${boardId}?label=${filterLabel}&member=${filterMember}&due=${filterDue}`
     );
   
     const grouped = {};
@@ -172,7 +172,7 @@ function Board() {
 
       const order = newLists.map((l) => Number(l.id));
 
-      await axios.put("http://127.0.0.1:8000/lists/reorder", {
+      await axios.put("${API}/lists/reorder", {
         order,
       });
 
@@ -200,7 +200,7 @@ function Board() {
 
       const order = sourceCards.map((c) => Number(c.id));
 
-      await axios.put("http://127.0.0.1:8000/cards/reorder", {
+      await axios.put("${API}/cards/reorder", {
         order,
       });
     } else {
@@ -214,7 +214,7 @@ function Board() {
       });
 
       await axios.put(
-        `http://127.0.0.1:8000/cards/${movedCard.id}/move?new_list_id=${destListId}`
+        `${API}/cards/${movedCard.id}/move?new_list_id=${destListId}`
       );
     }
   };
@@ -225,7 +225,7 @@ function Board() {
     formData.append("file", file);
   
     await axios.post(
-      `http://127.0.0.1:8000/cards/${cardId}/upload`,
+      `${API}/cards/${cardId}/upload`,
       formData
     );
   
@@ -250,7 +250,7 @@ function Board() {
     const color = e.target.value;
 
     await axios.put(
-      `http://127.0.0.1:8000/boards/${boardId}/background?background=${color}`
+      `${API}/boards/${boardId}/background?background=${color}`
     );
 
     fetchBoards();
@@ -273,7 +273,7 @@ function Board() {
     const title = prompt("Board name:");
     if (!title) return;
 
-    await axios.post("http://127.0.0.1:8000/boards", null, {
+    await axios.post("${API}/boards", null, {
       params: { title },
     });
 
@@ -374,7 +374,7 @@ style={{
                                   >
                                     {card.cover_image && (
   <img
-    src={`http://127.0.0.1:8000/${card.cover_image}`}
+    src={`${API}/${card.cover_image}`}
     alt="cover"
     style={{
       width: "100%",
@@ -401,7 +401,7 @@ style={{
       if (!e.target.value) return;
 
       await axios.post(
-        `http://127.0.0.1:8000/cards/${card.id}/comments?text=${e.target.value}`
+        `${API}/cards/${card.id}/comments?text=${e.target.value}`
       );
 
       e.target.value = "";
@@ -447,7 +447,7 @@ style={{
     }}
     onClick={async () => {
       await axios.put(
-        `http://127.0.0.1:8000/cards/${card.id}/cover?file_path=`
+        `${API}/cards/${card.id}/cover?file_path=`
       );
       fetchLists();
     }}
@@ -466,7 +466,7 @@ style={{
       {/* 🔥 SHOW IMAGE IF IMAGE */}
       {a.file_name.match(/\.(jpg|jpeg|png|webp)$/i) && (
         <img
-          src={`http://127.0.0.1:8000/${a.file_path}`}
+          src={`${API}/${a.file_path}`}
           alt="attachment"
           style={{
             width: "100%",
@@ -488,7 +488,7 @@ style={{
           style={{ fontSize: "10px", marginTop: "2px" }}
           onClick={async () => {
             await axios.put(
-              `http://127.0.0.1:8000/cards/${card.id}/cover?file_path=${a.file_path}`
+              `${API}/cards/${card.id}/cover?file_path=${a.file_path}`
             );
             fetchLists();
           }}
@@ -506,7 +506,7 @@ style={{
                                           key={label.id}
                                           onClick={async () => {
                                             await axios.delete(
-                                              `http://127.0.0.1:8000/labels/${label.id}`
+                                              `${API}/labels/${label.id}`
                                             );
                                             fetchLists();
                                           }}
@@ -545,7 +545,7 @@ style={{
                                             checked={item.completed}
                                             onChange={async () => {
                                               await axios.put(
-                                                `http://127.0.0.1:8000/checklist/${item.id}`
+                                                `${API}/checklist/${item.id}`
                                               );
                                               fetchLists();
                                             }}
@@ -576,7 +576,7 @@ style={{
                                         if (!name || !color) return;
 
                                         await axios.post(
-                                          `http://127.0.0.1:8000/cards/${card.id}/labels?name=${name}&color=${color}`
+                                          `${API}/cards/${card.id}/labels?name=${name}&color=${color}`
                                         );
                                         fetchLists();
                                       }}
@@ -589,7 +589,7 @@ style={{
                                       onClick={async () => {
                                         const text = prompt("Checklist item:");
                                         await axios.post(
-                                          `http://127.0.0.1:8000/cards/${card.id}/checklist?text=${text}`
+                                          `${API}/cards/${card.id}/checklist?text=${text}`
                                         );
                                         fetchLists();
                                       }}
@@ -602,7 +602,7 @@ style={{
                                       onClick={async () => {
                                         const name = prompt("Member name:");
                                         await axios.post(
-                                          `http://127.0.0.1:8000/cards/${card.id}/members?name=${name}`
+                                          `${API}/cards/${card.id}/members?name=${name}`
                                         );
                                         fetchLists();
                                       }}
@@ -615,7 +615,7 @@ style={{
                                       onClick={async () => {
                                         const date = prompt("YYYY-MM-DD");
                                         await axios.put(
-                                          `http://127.0.0.1:8000/cards/${card.id}/due?due_date=${date}`
+                                          `${API}/cards/${card.id}/due?due_date=${date}`
                                         );
                                         fetchLists();
                                       }}
